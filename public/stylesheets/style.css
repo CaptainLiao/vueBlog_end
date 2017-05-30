@@ -1,0 +1,38 @@
+
+
+
+.fl {
+  float: left;
+}
+.fr {
+    float: right;
+}
+
+.clearfix:after,
+.clearfix:before {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+
+.sidebar {
+  height: 100%;
+  position: fixed;
+  z-index: 99;
+}
+.sidebar ul {
+    height: inherit;
+}
+.main {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow: scroll;
+  z-index: -1;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 60px 0 0 200px;
+}
