@@ -14,7 +14,7 @@ let app = express();
 app.locals.moment = require('moment');
 
 let mongoose = require('mongoose');
-const DB_URL = 'mongodb://fayin_blog:"fayin_blog@39.108"@127.0.0.1:19999/vueBlog'
+const DB_URL = 'mongodb://blog_end_runner:"blog_end_runner39108"@127.0.0.1:19999/vueBlog'
 
 if(env === 'development') {
   DB_URL = 'mongodb://localhost/vueBlog'
