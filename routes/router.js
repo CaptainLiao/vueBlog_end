@@ -22,8 +22,8 @@ module.exports = function(app) {
     app.post('/api/logout', User.logout);
 
     // 文章
-    app.get('/article', Article.edit);
-    app.get('/article/list', Article.list);
+    app.get('/article', User.loginRequired, Article.edit);
+    app.get('/article/list', User.loginRequired, Article.list);
 
     app.post('/api/article/new', User.loginRequired, Article.create);
     app.post('/api/article/del', User.loginRequired, Article.del);

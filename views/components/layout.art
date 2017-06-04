@@ -74,8 +74,8 @@
             dataType: 'json',
             data: {},
             success: function (res) {
-                //location.href = '/user/register'
-                console.log(res)
+                location.href = '/user/login'
+                
             },
             error: function (err) {
                 
