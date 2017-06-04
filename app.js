@@ -14,7 +14,7 @@ let app = express();
 app.locals.moment = require('moment');
 
 let mongoose = require('mongoose');
-const DB_URL = 'mongodb://blog_end_runner:blog_end_runner39108@127.0.0.1:19999/vueBlog'
+let DB_URL = 'mongodb://blog_end_runner:blog_end_runner39108@127.0.0.1:19999/vueBlog';
 
 if(env === 'development') {
   DB_URL = 'mongodb://localhost/vueBlog'
@@ -50,16 +50,21 @@ app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept,params");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+
     next();
 });
 
 let index = require('./routes/index');
-let users = require('./routes/users');
+let user = require('./routes/user');
 
-app.use('/', index);
-app.use('/article', require('./routes/article'));
-app.use('/uploadImg', require('./routes/uploadImg'));
-app.use('/users', users);
+// app.use('/', index);
+// app.use('/article', require('./routes/article'));
+// app.use('/uploadImg', require('./routes/uploadImg'));
+// app.use('/user', user);
+
+let routes = require('./routes/router');
+routes(app);
+
 
 
 // catch 404 and forward to error handler
@@ -69,17 +74,19 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(err);
 });
-
 
 module.exports = app;
 
