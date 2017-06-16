@@ -30,7 +30,7 @@ ArticleSchema.pre('update', function(next) {
 });
 
 ArticleSchema.statics = {
-    fetch(id, cb) {
+    fetch(cb, id) {
         // if (id) {
         //     return this.find({'_id': {"$lt": id}})
         //         .limit(5)
