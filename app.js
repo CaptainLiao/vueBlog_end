@@ -38,10 +38,12 @@ app.set('views', path.join(__dirname, 'views'));
 // session本地持久化处理
 app.use(session({
   secret: 'blog',
+    resave: true,
+    saveUninitialized: false,
   store: new MongoStore({
     url: DB_URL
   })
-}))
+}));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -61,8 +63,8 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-let index = require('./routes/index');
-let user = require('./routes/user');
+// let index = require('./routes/index');
+// let user = require('./routes/user');
 
 // app.use('/', index);
 // app.use('/article', require('./routes/article'));
@@ -91,8 +93,9 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+  if(err) err.status = 200;
   res.status(err.status || 500);
-  res.send(err);
+  res.send({code: -1,err});
 });
 
 module.exports = app;

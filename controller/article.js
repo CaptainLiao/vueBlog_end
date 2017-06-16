@@ -26,14 +26,17 @@ exports.edit = (req, res, next) => {
 };
 
 exports.list = (req, res, next) => {
-    Article.fetch((err, data) => {
-        if(err) throw new Error(err);
+    let id = +req.query.page;
 
-        res.render('articleList.art', { title: '文章列表', articles: data } );
-
+    Article.count({}, (err, count) => {
+       Article.fetch(-- id, (err, data) => {
+        if(err) next(err);
+        
+        res.render('articleList.art', { title: '文章列表', articles: data, count } );
+        }) 
     })
+    
 };
-
 
 exports.create = (req, res, next) => {
     let articleObj = req.body;
@@ -48,7 +51,8 @@ exports.create = (req, res, next) => {
                     res.send({code: 0, msg: 'success', result});
                 })
                 .catch(err => {
-                    res.send({code: -1,msg: 'error',err})
+                    //res.send({code: -1,msg: 'error',err})
+                    next(err);
                 })
     }else {
         newArticle = new Article({
@@ -57,11 +61,8 @@ exports.create = (req, res, next) => {
             type: articleObj.type
         });
         newArticle.save((err, result) => {
-            if(err) {
-                res.send({code: -1,msg: 'error',err})
-            }else {
-                res.send({code: 0, msg: 'success', result});
-            }
+            if(err) next(err);
+            res.send({code: 0, msg: 'success', result});
         });
     }
 
@@ -71,22 +72,16 @@ exports.del = (req, res, next) => {
     let id = req.body.id.replace(/\"/g, '');
 
     Article.delById(id, (err, article) => {
-        if(err) {
-            res.send({code: -1,msg: 'error',err})
-        }else {
-            res.send({code: 0, msg: 'success', article});
-        }
+        if(err) next(err);
+
+        res.send({code: 0, msg: 'success', article});
     })
 
 };
 
 exports.archive = (req, res, next) => {
     Article.fetch((err, data) => {
-        if(err) {
-            res.send({ err});
-            return;
-        }
-
+        if(err) next(err);
         data.map(function (item) {
             item.content = '';
             console.log(delete item.content);
@@ -100,7 +95,7 @@ exports.archive = (req, res, next) => {
 
 exports.apiList = (req, res, next) => {
     Article.fetch((err, data) => {
-        if(err) throw new Error(err);
+        if(err) next(err);
         res.send({ title: '文章列表', articles: data ,code: 0})
     })
 };
@@ -123,6 +118,7 @@ exports.apiDetail = (req, res, next) => {
                     res.send({ msg: '文章详情', article: data })
 
                 })
+                .catch(err => next(err))
     } else {
         res.send('article.art', { msg: '文章详情', article: {} });
     }

@@ -30,10 +30,22 @@ ArticleSchema.pre('update', function(next) {
 });
 
 ArticleSchema.statics = {
-    fetch(cb) {
+    fetch(id, cb) {
+        // if (id) {
+        //     return this.find({'_id': {"$lt": id}})
+        //         .limit(5)
+        //         .sort({'_id':-1})
+        //         .exec(cb);
+        //     }else {
+        //         return this.find({})
+        //         .limit(5)
+        //         .sort({'_id':-1})
+        //         .exec(cb);
+        //     }
         return this.find({})
+                .skip(id * 5)
+                .limit(5)
                 .sort({'_id':-1})
-
                 .exec(cb);
     },
 
@@ -49,6 +61,7 @@ ArticleSchema.statics = {
             })
         })
     },
+
     delById(id, cb) {
         return this.remove({_id: id})
                 .exec(cb);
@@ -67,6 +80,7 @@ ArticleSchema.statics = {
                             }
                         })
                     })
+                    .catch(err => reject(err))
         });
 
     }
