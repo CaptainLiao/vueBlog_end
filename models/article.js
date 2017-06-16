@@ -42,11 +42,18 @@ ArticleSchema.statics = {
         //         .sort({'_id':-1})
         //         .exec(cb);
         //     }
-        return this.find({})
+        if(id) {
+            return this.find({})
                 .skip(id * 5)
                 .limit(5)
                 .sort({'_id':-1})
                 .exec(cb);
+        }else {
+            return this.find({})
+                .sort({'_id':-1})
+                .exec(cb);
+        }
+        
     },
 
     findById(id) {
